@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zurich Night Adventure</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; /* changed from height to min-height for safety */
+            margin: 0;
+            
+            /* Light Red Background */
+            background-color: #e73535; 
+            
+            /* Electric Neon Yellow Text */
+            color: #def81c; 
+            
+            text-align: center; 
+            padding: 20px; /* Standard padding for mobile */
+            
+            /* This adds a black outline so the yellow pops against the red */
+            text-shadow: 2px 2px 0px #000000;
+        }
+
+        #sentence { 
+            /* Responsive font size: 
+               - Minimum: 1.5rem (readable on small phones)
+               - Preferred: 5vw (scales with screen width)
+               - Maximum: 2.5rem (stops getting too huge on desktop) 
+            */
+            font-size: clamp(1.5rem, 5vw, 2.5rem); 
+            
+            font-weight: 900;  /* Extra bold */
+            line-height: 1.3;
+            text-transform: uppercase; 
+            
+            /* Constrain width so it doesn't hit the very edges */
+            width: 100%;
+            max-width: 600px;
+            
+            /* Ensure long words break if necessary */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* Small instruction at the bottom */
+        .hint {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: white;
+            text-shadow: 1px 1px 0px #000;
+            font-weight: bold;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sentence"></div>
+    
+    <div class="hint">SCAN AGAIN FOR NEW FATE</div>
+
+    <script>
+        // YOUR DATABASE
+        const database = [
+            "Hug your friend energetically.",
+            "Lose yourself in the music.",
+            "Buy a drink for a person of the opposite gender.",
+            "Take a shot with 2 people, you buy them.",
+            "Convince a person of the opposite gender to buy you a drink.",
+            "What's the worst text you've ever sent while drunk?",
+            "Go up to a stranger and say \"You're cute… for someone I haven't blocked yet\".",
+            "How many people in this club have you already unmatched on Tinder?",
+            "Do the most dramatic fake-cry on someone's shoulder and walk away.",
+            "What's the lamest thing you've ever said to get someone's number?",
+            "Tell the DJ \"play something for people who hate love\" and dedicate it to the whole club.",
+            "Who's the last person you ghosted and why was it glorious?",
+            "Buy a shot for someone… then say \"this is for all the feelings I'm never gonna have\".",
+            "How many \"I miss you\" texts have you left on read forever?",
+            "Dance like you're trying to scare your ex away.",
+            "What's the pettiest reason you stopped talking to someone?",
+            "Yell \"I'M EMOTIONALLY AVAILABLE… FOR ONE NIGHT ONLY!\" in the middle of the dancefloor.",
+            "Have you ever pretended to be someone's boyfriend/girlfriend to get rid of someone else here?",
+            "Take a selfie with a stranger and caption it \"new situationship loading…\".",
+            "What's the most embarrassing drunk pickup line you've used?",
+            "Tell someone \"you're giving main character energy… but I'm the villain\".",
+            "How many times have you said \"we're just talking\" when you were definitely not?",
+            "Do a toast \"to all the red flags we ignored tonight!\".",
+            "What's the fastest you've ever lost interest in someone you just met?",
+            "Text your situationship \"thinking about you… nah jk I'm at the club\".",
+            "Have you ever hooked up with someone just because the song was good?",
+            "Go ask a random person \"are you single? …cool, me too, bye\".",
+            "What's the dumbest excuse you've used to leave a date early?",
+            "Shout \"LOVE IS A SOCIAL CONSTRUCT!\" and take a shot.",
+            "How many people in this room look like your type… but you still wouldn't?",
+            "Flirt with someone for 10 seconds, then say \"nah, too much effort\".",
+            "What's the most savage reply you've ever sent after getting curved?",
+            "Dance with someone for one song, then ghost them mid-song.",
+            "Have you ever come to the club specifically to make your ex jealous?",
+            "Tell the bartender \"make it strong, I'm avoiding feelings tonight\".",
+            "What's the worst thing you've ever done while jealous?",
+            "Post a story right now: \"here to disappoint someone tonight\".",
+            "How long did your shortest situationship last? (be honest).",
+            "Go up to someone and say \"you're cute… shame about your taste in people\".",
+            "What's the most toxic thing you find hot?",
+            "Do the \"I'm single\" shoulder shimmy for 10 seconds.",
+            "Have you ever lied about your zodiac sign to seem more compatible?",
+            "Tell a stranger \"happy anti-Valentine's Day\" and clink glasses.",
+            "What's the pettiest revenge you've taken after a breakup?",
+            "Whisper dramatically to someone \"I think I'm allergic to commitment\".",
+            "How many times have you said \"I'm not looking for anything serious\" this month?",
+            "Ask someone to dance, then say \"psych! I'm dancing alone tonight\".",
+            "What's the most ridiculous thing you've cried over because of a crush?",
+            "Raise your glass and yell \"to bad decisions and worse exes!\".",
+            "Have you ever pretended to be more drunk than you were to get out of a conversation?",
+            "Do a sexy dance… then immediately transition into the sprinkler.",
+            "What's the most delusional thing you've believed about someone you liked?",
+            "Text \"you up?\" to someone you have zero intention of seeing.",
+            "How many people have you told \"you're different\" when they weren't?",
+            "End the night by shouting \"I CHOOSE ME… AND ANOTHER ROUND!\".",
+            "Shout to the dancefloor: Worst pickup line you've heard tonight?",
+            "Gather 5 strangers in a circle and convince one to buy the whole group shots \"because love sucks!\".",
+            "How many people on this dancefloor have you already unmatched IRL?",
+            "Form a chain with 10 randos and yell \"Buy us anti-Valentine shots or we keep dancing in your face!\".",
+            "Pettiest reason you curved someone right here in the club?",
+            "Grab a group of dancers and chant to a cutie: \"One round on you or we expose your red flags to the DJ!\".",
+            "Ever ghosted mid-dance? Spill to the bar crowd!",
+            "Rally 8 people at the bar: \"Toast to single life — first buyer gets hero status!\".",
+            "Lamest \"you're my type\" excuse you've used in this crowd?",
+            "Pull a squad of strangers together: \"Convince the bartender for free shots for the whole anti-love crew!\".",
+            "Fastest \"nah\" you've given a hottie on the floor?",
+            "Start a conga line of 15+ people shouting \"Drinks on the next simp who believes in soulmates!\".",
+            "Most toxic vibe you've caught from someone in this mix?",
+            "Circle up 6-10 dancers: \"Group dare — someone buys the round or we all fake-cry on them!\".",
+            "How many \"situationships\" ended after one night out?",
+            "Yell to the room: \"Red flag hunt! Point out yours and buy drinks for the squad that spots it!\".",
+            "Dumbest drunk lie for a free drink?",
+            "Get a group of 5+ to dance-grind then demand: \"Shots for the crew or we ghost the whole floor!\".",
+            "Came to the club tonight to make who jealous?",
+            "Form a human wall with strangers: \"Block the bar till someone buys the anti-Valentine round!\".",
+            "Savage reply you've thrown at a curve?",
+            "Mid-song, gather 10+ people: \"Dance battle winner's tab pays for everyone's next drink!\".",
+            "Shortest \"fling\" story — tell the circle!",
+            "Convince a big group: \"Buy us shots or rate your exes live for the whole club!\".",
+            "Ever faked being taken to dodge a flirt?",
+            "Start a chant with the crowd: \"Single tax! Everyone point to one person to buy the next round!\".",
+            "Hottest red flag you've spotted on the dancefloor tonight?",
+            "Pull strangers into a circle: \"Anti-Valentine toast chain — loser of the chain buys!\".",
+            "How many \"I miss you\" texts ignored after last night out?",
+            "Rally the bar area: \"Whoever clinks first buys the crew — go!\".",
+            "Jealousy level seeing couples in this intimate spot?",
+            "Get 7+ people: \"Story time — best ghost story wins free drinks from the group!\".",
+            "Lied about anything tonight to score drinks?",
+            "Form a squad: \"Convince randoms — shots for the anti-love army or we take over the DJ booth (jk)!\".",
+            "Most delusional crush moment?",
+            "Shout to the floor: \"Group shimmy! Shimmy till someone buys the round!\".",
+            "Pretended to like the DJ just to chat someone up here?",
+            "Circle of strangers: \"Clink glasses — first to drop buys the next for everyone!\".",
+            "Pettiest revenge you've witnessed?",
+            "Gather dancers: \"Dance-off relay — losing team buys shots for winners!\".",
+            "How many \"not looking for anything\" lies this month?",
+            "Big group dare: \"Fake proposal to a stranger — they say yes, they buy; no, you buy!\".",
+            "Ridiculous thing you cried over after a night out?",
+            "Yell to the whole club: \"To bad decisions — who's buying?!\".",
+            "Faked drunk to escape a convo on this dancefloor?",
+            "Get 10+ in on it: \"Sprinkler challenge — last one dancing buys the crew!\".",
+            "\"You're different\" lie you've told a rando?",
+            "Crowd chant: \"You up? Nah — buy this round instead!\".",
+            "Delusional thing you believed about a crush?",
+            "Final big one: Rally the room for a massive toast — \"To choosing shots over soulmates!\".",
+            "Last clinker buys!",
+            "Grab a stranger and say, \"Buy us shots or my friends scream your name across the club!\".",
+            "Tell your friends, \"Pick the cutest stranger — we make them buy the round!\".",
+            "Pull three randoms in and announce, \"My crew votes: you buy shots or we dance on you!\".",
+            "With your friends chant to a stranger, \"One drink or we tell everyone you’re our new bestie!\".",
+            "Find four strangers and dare your group, \"Whoever imitates them worst buys the shots!\".",
+            "Tell a stranger, \"My friends bet you won’t buy me a drink — prove them wrong!\".",
+            "Rally your crew and shout to the bar, \"We need five strangers to join — shots on the shyest one!\".",
+            "Point at a stranger and tell your friends, \"Fake-cry on him — first to laugh buys!\".",
+            "Grab a random and say, \"My squad says you look rich — prove it with drinks!\".",
+            "With friends form a circle around a stranger: \"Confess a red flag or buy us all shots!\".",
+            "Tell your crew, \"Pick any stranger — we copy their dance until they buy us drinks!\".",
+            "Approach a stranger with friends behind: \"They dared me to get a drink from you — help?\".",
+            "Pull five randos and tell your group, \"Rate their outfits — worst dressed buys the round!\".",
+            "Chant with friends to a cute stranger: \"Shots or we dedicate the next song to your ex!\".",
+            "Tell a stranger, \"My friends think you’re too cool to buy drinks — change their mind!\".",
+            "Rally your crew and surround a group: \"Join us or buy shots to escape!\".",
+            "Grab a stranger and whisper, \"My friends are watching — buy me one to look smooth?\".",
+            "With your squad yell at the dancefloor: \"First stranger who joins buys the next round!\".",
+            "Tell friends, \"Choose a stranger — we do sexy dance-off, loser’s crew buys!\".",
+            "Pull a random in and say, \"My friends won’t stop until you buy us shots!\".",
+            "Point to a stranger and tell your crew, \"Bet you can’t make them blush — winner free drinks!\".",
+            "Form a conga with friends and kidnap a stranger: \"You’re in — shots or you’re out!\".",
+            "Tell a stranger, \"My squad needs entertainment — buy drinks or dance badly for us!\".",
+            "With friends start a chant at the bar: \"Stranger tax! — point until someone pays!\".",
+            "Grab two strangers and tell your group, \"Worst pickup line contest — losers buy!\".",
+            "Tell your friends, \"Find the most awkward dancer — we make them buy shots!\".",
+            "Approach a stranger with your crew: \"They dared me — buy me a drink or I kiss your cheek!\".",
+            "Rally friends and yell, \"We need ten strangers — last one to join buys the round!\".",
+            "Tell a stranger, \"My friends say you’re single — prove it with drinks!\".",
+            "With your squad circle a stranger: \"Fake proposal time — yes means you buy shots!\".",
+            "Grab a random and say, \"My crew is thirsty — save us with one round!\".",
+            "Tell friends, \"Pick any stranger — we ghost them mid-convo, they chase = shots!\".",
+            "Pull three strangers in and announce, \"My friends vote: you’re buying!\".",
+            "Chant with your group to a stranger: \"Red flag! Red flag! — confess or pay!\".",
+            "Tell a stranger, \"My squad bet I can’t get a free drink — help me win?\".",
+            "With friends form a wall at the bar: \"No one leaves until a stranger buys!\".",
+            "Grab a stranger and dare your friends, \"Copy his move — best one gets drinks paid!\".",
+            "Tell your crew, \"Spot the biggest red flag — we roast them into buying shots!\".",
+            "Approach a group with friends: \"Join the anti-love army or buy the next round!\".",
+            "Tell a stranger, \"My friends are judging you — buy drinks to impress them!\".",
+            "Rally your squad and kidnap five randos: \"You’re our new friends — shots on you!\".",
+            "With friends yell to the floor: \"First stranger who smiles at us buys!\".",
+            "Pull a stranger in and say, \"My crew needs a hero — buy us drinks!\".",
+            "Tell your friends, \"Choose a stranger — we do worst dance battle, they judge!\".",
+            "Grab a random and announce, \"My squad says you owe us shots for existing!\".",
+            "Chant with friends: \"Soulmate tax! — point at strangers until someone pays!\".",
+            "Tell a stranger, \"My friends dared me — buy me one or I hug you awkwardly!\".",
+            "With your crew surround a dancer: \"Copy our silly move or buy the round!\".",
+            "Rally friends and shout, \"We need strangers for shots — volunteer or get chosen!\".",
+            "Final big one: Tell the whole dancefloor with your squad, \"Last person who joins us buys shots for everyone!\".",
+            "My friend thinks you're cute… in a \"shouldn't but probably will\" way.",
+            "Buy her a drink before she comes to her senses.",
+            "She says your vibe is \"bad decision I won't regret tomorrow\". Shots to make sure.",
+            "He's too proud to beg… so I'm begging on my knees: drinks please?",
+            "My bestie just ranked you \"hot but definitely trouble\". Prove the hot part with shots.",
+            "She whispered \"he's giving situationship I can fix\" energy. Start the therapy with drinks.",
+            "He told me you look like you break hearts for sport. Buy us shots before you break ours.",
+            "My girl says you're \"dangerously fuckable\". Dangerous enough to buy a round?",
+            "She says your game is \"mid but the face card saves it\". Save the night with drinks.",
+            "He’s shy… like a pornstar in a church. Loosen him up with shots.",
+            "My friend’s love language is \"free alcohol and bad choices\". Speak it.",
+            "She ranked you \"walking red flag but I like red\". Wave the flag with drinks.",
+            "He said you give strong \"I'll delete your number tomorrow\" energy. Make tonight worth saving.",
+            "My bestie says you're \"cute in a restraining-order-pending\" way. Stay cute, buy shots.",
+            "She thinks you're hot… like \"I shouldn't text this number\" hot. Text the bartender instead.",
+            "He’s in his \"I can change him\" era. You’re the him. Change begins with drinks.",
+            "My girl called you \"premium fuckboy edition\". Unlock the premium with shots.",
+            "She says your aura is \"I’ll ghost you but make it romantic\". Make it expensive first.",
+            "He told me you look like \"great story, terrible decision\". Start the story with a round.",
+            "My friend’s in her \"men are temporary, hangovers are forever\" era. Contribute to the forever.",
+            "She ranked you \"hot mess express – first class only\". Buy the ticket.",
+            "He’s allergic to paying and commitment. Cure one of them tonight.",
+            "My bestie says you're giving \"future drunk text material\". Start the drunk part now.",
+            "She whispered \"he’s trouble I want to get into\". Get us into drinks first.",
+            "He says you look like you’d look good doing walk of shame. Start with shots.",
+            "My girl diagnosed you with \"terminal fuckboy syndrome\". Treatment = rounds.",
+            "She says you're \"cute but definitely bad news\". Bad news travels fast – buy quick.",
+            "He’s collecting bad decisions like Pokémon. You’re his next rare one. Catch him with shots.",
+            "My friend says your face card said decline… but your wallet might say approved.",
+            "She called you \"walking bad idea\". We love bad ideas. Sponsor them.",
+            "He told me you're \"hot in a consequences kind of way\". We like consequences.",
+            "My bestie just put you in the \"maybe if he pays\" tier. Climb fast.",
+            "She says you give \"I’ll ruin your life but make it fun\" energy. Fun starts with drinks.",
+            "He’s doing the bare minimum… you do the bar maximum.",
+            "My girl ranked your vibe \"expensive mistake I want to make\". Make the mistake.",
+            "She thinks you're cute… like \"I’ll hate myself tomorrow\" cute. Hate us with shots.",
+            "He says you look like \"great sex, terrible follow-up text\". Skip the text, do drinks.",
+            "My friend’s collecting situationships like trading cards. Be her ultra rare.",
+            "She called you \"main character who fucks up the plot\". Fuck up our tab instead.",
+            "He’s one drink away from sending that risky text. Make him send it drunk.",
+            "My bestie says you're \"hot but zero emotional availability\". Zero is fine, shots aren’t.",
+            "She says your personality is DLC – pay to unlock the good version.",
+            "He told me you’re \"cute in a 'delete later' way\". Delete the bill instead.",
+            "My girl’s in her \"fuck feelings, pour drinks\" era. Pour.",
+            "She ranked you \"attractive disaster\". We love disasters. Sponsor them.",
+            "He says you give strong \"I’ll regret this in the morning\" energy. Regret us with shots.",
+            "My friend diagnosed you with \"chronic hotness, zero follow-through\". Follow through now.",
+            "She whispered \"he’s the type you warn your friends about\". Warn us with drinks.",
+            "He’s shy like a porn tab in incognito. Open up with shots.",
+            "My bestie says your vibe is \"premium red flag\". Premium deserves premium drinks.",
+            "Last call energy: my friend will remember your name… only if you buy the round."
+        ];
+
+        // This runs automatically the moment the page opens
+        const randomIndex = Math.floor(Math.random() * database.length);
+        const selectedSentence = database[randomIndex];
+        document.getElementById('sentence').innerText = selectedSentence;
+
+    </script>
+</body>
+</html>
