@@ -27,80 +27,89 @@
             text-align: center; 
             padding: 20px; 
             
-            /* This adds a black outline so the yellow pops against the red */
+            /* Black outline for readability */
             text-shadow: 2px 2px 0px #000000;
             
-            /* Prevents scrollbars if animation goes briefly off-screen */
             overflow: hidden; 
         }
 
-        #sentence { 
-            /* Responsive font size */
-            font-size: clamp(1.5rem, 5vw, 2.5rem); 
-            
-            font-weight: 900;  /* Extra bold */
-            line-height: 1.3;
-            text-transform: uppercase; 
-            
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             width: 100%;
             max-width: 600px;
+        }
+
+        .logo {
+            width: 180px; /* Adjusting size as requested: not too big */
+            height: auto;
+            margin-bottom: 30px; /* Space between logo and text */
             
+            /* Animation for logo: appears slightly faster/sooner than text */
+            opacity: 0;
+            animation: cinematicReveal 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards;
+            
+            /* If the logo has a white background, this makes it blend better with the red */
+            mix-blend-mode: multiply;
+            filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.2));
+        }
+
+        #sentence { 
+            font-size: clamp(1.6rem, 6vw, 2.8rem); 
+            font-weight: 900;
+            line-height: 1.2;
+            text-transform: uppercase; 
             word-wrap: break-word;
             overflow-wrap: break-word;
 
-            /* START HIDDEN so we can animate it in */
             opacity: 0;
-            
-            /* THE ANIMATION: 
-               - Duration: 1 second
-               - Timing: Custom 'cubic-bezier' makes it start fast and land softly
-               - Delay: 0.2s (tiny pause for drama)
-               - Fill-mode: 'forwards' keeps it visible after animation ends
-            */
-            animation: cinematicReveal 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards;
+            animation: cinematicReveal 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards;
         }
 
-        /* The Animation Keyframes */
         @keyframes cinematicReveal {
             0% {
-                filter: blur(20px);         /* Starts very blurry */
-                transform: scale(0.9) translateY(20px); /* Starts slightly small and lower */
-                opacity: 0;                 /* Invisible */
+                filter: blur(15px);
+                transform: scale(0.9) translateY(30px);
+                opacity: 0;
             }
             100% {
-                filter: blur(0);            /* Perfectly sharp */
-                transform: scale(1) translateY(0);    /* Normal size and position */
-                opacity: 1;                 /* Fully visible */
+                filter: blur(0);
+                transform: scale(1) translateY(0);
+                opacity: 1;
             }
         }
 
-        /* Small instruction at the bottom */
         .hint {
-            margin-top: 50px;
-            font-size: 0.8rem;
+            margin-top: 60px;
+            font-size: 0.85rem;
             color: white;
             text-shadow: 1px 1px 0px #000;
             font-weight: bold;
             letter-spacing: 2px;
-            
-            /* Animate this too, but slower and later */
             opacity: 0;
-            animation: fadeIn 1s ease 1.5s forwards; 
+            animation: fadeIn 1.2s ease 1.8s forwards; 
         }
 
         @keyframes fadeIn {
-            to { opacity: 0.8; }
+            to { opacity: 0.7; }
         }
     </style>
 </head>
 <body>
 
-    <div id="sentence"></div>
+    <div class="content-wrapper">
+        <!-- Logo above the text -->
+        <img src="logo copy 2.png" alt="NO FUN" class="logo">
+        
+        <!-- Randomized sentence -->
+        <div id="sentence"></div>
+    </div>
     
     <div class="hint">SCAN AGAIN FOR NEW FATE</div>
 
     <script>
-        // YOUR DATABASE OF SENTENCES
         const database = [
             "Hug your friend energetically.",
             "Lose yourself in the music.",
@@ -311,11 +320,9 @@
             "Last call energy: my friend will remember your name… only if you buy the round."
         ];
 
-        // This runs automatically the moment the page opens
         const randomIndex = Math.floor(Math.random() * database.length);
         const selectedSentence = database[randomIndex];
         document.getElementById('sentence').innerText = selectedSentence;
-
     </script>
 </body>
 </html>
