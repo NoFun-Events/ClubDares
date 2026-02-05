@@ -43,17 +43,16 @@
         }
 
         .logo {
-            width: 180px; /* Adjusting size as requested: not too big */
+            width: 200px; /* Slightly larger for better visibility */
             height: auto;
-            margin-bottom: 30px; /* Space between logo and text */
+            margin-bottom: 30px;
             
-            /* Animation for logo: appears slightly faster/sooner than text */
+            /* Cinematic Animation */
             opacity: 0;
             animation: cinematicReveal 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards;
             
-            /* If the logo has a white background, this makes it blend better with the red */
-            mix-blend-mode: multiply;
-            filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.2));
+            /* Stronger shadow for visibility against red */
+            filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.4));
         }
 
         #sentence { 
@@ -100,8 +99,8 @@
 <body>
 
     <div class="content-wrapper">
-        <!-- Logo above the text -->
-        <img src="logo copy 2.png" alt="NO FUN" class="logo">
+        <!-- Using the new logo file -->
+        <img src="logo copy 3.png" alt="NO FUN" class="logo">
         
         <!-- Randomized sentence -->
         <div id="sentence"></div>
@@ -302,7 +301,7 @@
             "She says you give \"I’ll ruin your life but make it fun\" energy. Fun starts with drinks.",
             "He’s doing the bare minimum… you do the bar maximum.",
             "My girl ranked your vibe \"expensive mistake I want to make\". Make the mistake.",
-            "She thinks you're cute… like \"I’ll hate myself tomorrow\" cute. Hate us with shots.",
+            "She thinks you're cute… like \"I'll hate myself tomorrow\" cute. Hate us with shots.",
             "He says you look like \"great sex, terrible follow-up text\". Skip the text, do drinks.",
             "My friend’s collecting situationships like trading cards. Be her ultra rare.",
             "She called you \"main character who fucks up the plot\". Fuck up our tab instead.",
